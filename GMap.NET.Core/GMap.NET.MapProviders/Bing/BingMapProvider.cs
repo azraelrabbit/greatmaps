@@ -184,7 +184,7 @@ namespace GMap.NET.MapProviders
                #region -- try get sesion key --
                if(!string.IsNullOrEmpty(key))
                {
-                  string keyResponse = GMaps.Instance.UseUrlCache ? Cache.Instance.GetContent("BingLoggingServiceV1" + key, CacheType.UrlCache, TimeSpan.FromHours(8)) : string.Empty;
+                  string keyResponse = GMaps.Instance.UseUrlCache ? Cache.Instance.GetContent("BingLoggingServiceV1" + key, CacheType.UrlCache, TimeSpan.FromHours(GMapProvider.TTLCache)) : string.Empty;
 
                   if(string.IsNullOrEmpty(keyResponse))
                   {
@@ -254,6 +254,7 @@ namespace GMap.NET.MapProviders
                               GMapProviders.BingMap.Version = ver;
                               GMapProviders.BingSatelliteMap.Version = ver;
                               GMapProviders.BingHybridMap.Version = ver;
+                              GMapProviders.BingOSMap.Version = ver;
 #if DEBUG
                               Debug.WriteLine("GMapProviders.BingMap.Version: " + ver + ", old: " + old + ", consider updating source");
                               if(Debugger.IsAttached)
@@ -371,13 +372,13 @@ namespace GMap.NET.MapProviders
 
       #region RoutingProvider
 
-      public MapRoute GetRoute(PointLatLng start, PointLatLng end, bool avoidHighways, bool walkingMode, int Zoom)
+      public MapRoute GetRoute(PointLatLng start, PointLatLng end, bool avoidHighways, bool walkingMode, int zoom, bool getInstructions = false)
       {
          string tooltip;
          int numLevels;
          int zoomFactor;
          MapRoute ret = null;
-         List<PointLatLng> points = GetRoutePoints(MakeRouteUrl(start, end, LanguageStr, avoidHighways, walkingMode), Zoom, out tooltip, out numLevels, out zoomFactor);
+         List<PointLatLng> points = GetRoutePoints(MakeRouteUrl(start, end, LanguageStr, avoidHighways, walkingMode), zoom, out tooltip, out numLevels, out zoomFactor);
          if(points != null)
          {
             ret = new MapRoute(points, tooltip);
@@ -385,13 +386,13 @@ namespace GMap.NET.MapProviders
          return ret;
       }
 
-      public MapRoute GetRoute(string start, string end, bool avoidHighways, bool walkingMode, int Zoom)
+      public MapRoute GetRoute(string start, string end, bool avoidHighways, bool walkingMode, int zoom)
       {
          string tooltip;
          int numLevels;
          int zoomFactor;
          MapRoute ret = null;
-         List<PointLatLng> points = GetRoutePoints(MakeRouteUrl(start, end, LanguageStr, avoidHighways, walkingMode), Zoom, out tooltip, out numLevels, out zoomFactor);
+         List<PointLatLng> points = GetRoutePoints(MakeRouteUrl(start, end, LanguageStr, avoidHighways, walkingMode), zoom, out tooltip, out numLevels, out zoomFactor);
          if(points != null)
          {
             ret = new MapRoute(points, tooltip);

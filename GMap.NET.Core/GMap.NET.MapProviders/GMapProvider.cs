@@ -76,6 +76,7 @@ namespace GMap.NET.MapProviders
         public static readonly BingMapProvider BingMap = BingMapProvider.Instance;
         public static readonly BingSatelliteMapProvider BingSatelliteMap = BingSatelliteMapProvider.Instance;
         public static readonly BingHybridMapProvider BingHybridMap = BingHybridMapProvider.Instance;
+        public static readonly BingOSMapProvider BingOSMap = BingOSMapProvider.Instance;
 
         public static readonly YahooMapProvider YahooMap = YahooMapProvider.Instance;
         public static readonly YahooSatelliteMapProvider YahooSatelliteMap = YahooSatelliteMapProvider.Instance;
@@ -127,12 +128,20 @@ namespace GMap.NET.MapProviders
 
         public static readonly SpainMapProvider SpainMap = SpainMapProvider.Instance;
 
+        public static readonly CzechMapProviderOld CzechOldMap = CzechMapProviderOld.Instance;
+        public static readonly CzechSatelliteMapProviderOld CzechSatelliteOldMap = CzechSatelliteMapProviderOld.Instance;
+        public static readonly CzechHybridMapProviderOld CzechHybridOldMap = CzechHybridMapProviderOld.Instance;
+        public static readonly CzechTuristMapProviderOld CzechTuristOldMap = CzechTuristMapProviderOld.Instance;
+        public static readonly CzechHistoryMapProviderOld CzechHistoryOldMap = CzechHistoryMapProviderOld.Instance;
+
         public static readonly CzechMapProvider CzechMap = CzechMapProvider.Instance;
         public static readonly CzechSatelliteMapProvider CzechSatelliteMap = CzechSatelliteMapProvider.Instance;
         public static readonly CzechHybridMapProvider CzechHybridMap = CzechHybridMapProvider.Instance;
         public static readonly CzechTuristMapProvider CzechTuristMap = CzechTuristMapProvider.Instance;
+        public static readonly CzechTuristWinterMapProvider CzechTuristWinterMap = CzechTuristWinterMapProvider.Instance;
         public static readonly CzechHistoryMapProvider CzechHistoryMap = CzechHistoryMapProvider.Instance;
-
+        public static readonly CzechGeographicMapProvider CzechGeographicMap = CzechGeographicMapProvider.Instance;
+        
         public static readonly ArcGIS_Imagery_World_2D_MapProvider ArcGIS_Imagery_World_2D_Map = ArcGIS_Imagery_World_2D_MapProvider.Instance;
         public static readonly ArcGIS_ShadedRelief_World_2D_MapProvider ArcGIS_ShadedRelief_World_2D_Map = ArcGIS_ShadedRelief_World_2D_MapProvider.Instance;
         public static readonly ArcGIS_StreetMap_World_2D_MapProvider ArcGIS_StreetMap_World_2D_Map = ArcGIS_StreetMap_World_2D_MapProvider.Instance;
@@ -145,6 +154,8 @@ namespace GMap.NET.MapProviders
         public static readonly ArcGIS_World_Topo_MapProvider ArcGIS_World_Topo_Map = ArcGIS_World_Topo_MapProvider.Instance;
 
         public static readonly ArcGIS_DarbAE_Q2_2011_NAVTQ_Eng_V5_MapProvider ArcGIS_DarbAE_Q2_2011_NAVTQ_Eng_V5_Map = ArcGIS_DarbAE_Q2_2011_NAVTQ_Eng_V5_MapProvider.Instance;
+
+        public static readonly SwedenMapProvider SwedenMap = SwedenMapProvider.Instance;
 
         static List<GMapProvider> list;
 
@@ -189,6 +200,11 @@ namespace GMap.NET.MapProviders
     /// </summary>
     public abstract class GMapProvider
     {
+        /// <summary>
+        /// Time to live of cache, in hours. Default: 240 (10 days).
+        /// </summary>
+        public static int TTLCache = 240;
+
         /// <summary>
         /// unique provider id
         /// </summary>
@@ -313,8 +329,11 @@ namespace GMap.NET.MapProviders
         /// <summary>
         /// Gets or sets the value of the User-agent HTTP header.
         /// It's pseudo-randomized to avoid blockages...
-        /// </summary>                  
-        public static string UserAgent = string.Format("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:{0}.0) Gecko/{2}{3:00}{4:00} Firefox/{0}.0.{1}", Stuff.random.Next(3, 14), Stuff.random.Next(1, 10), Stuff.random.Next(DateTime.Today.Year - 4, DateTime.Today.Year), Stuff.random.Next(12), Stuff.random.Next(30));
+        /// </summary>                                
+        public static string UserAgent = string.Format("Mozilla/5.0 (Windows NT {1}.0; {2}rv:{0}.0) Gecko/20100101 Firefox/{0}.0",
+            Stuff.random.Next(DateTime.Today.Year - 1969 - 5, DateTime.Today.Year - 1969),
+            Stuff.random.Next(0, 10) % 2 == 0 ? 10 : 6,
+            Stuff.random.Next(0, 10) % 2 == 1 ? string.Empty : "WOW64; ");         
 
         /// <summary>
         /// timeout for provider connections
